@@ -17,14 +17,18 @@ export const getCurriculum = cache(async (): Promise<CurriculumGrade[]> => {
   ]);
   const failure = grades.error ?? units.error ?? lessons.error;
   if (failure) throw new Error(`Could not load the curriculum: ${failure.message}`);
+  // The combined check above doesn't narrow each result for TypeScript, so default explicitly.
+  const gradeRows = grades.data ?? [];
+  const unitRows = units.data ?? [];
+  const lessonRows = lessons.data ?? [];
 
   const lessonsByUnit = new Map<string, CurriculumLesson[]>();
-  for (const lesson of lessons.data) {
+  for (const lesson of lessonRows) {
     lessonsByUnit.set(lesson.unit_id, [...(lessonsByUnit.get(lesson.unit_id) ?? []), lesson]);
   }
-  return grades.data.map((grade) => ({
+  return gradeRows.map((grade) => ({
     ...grade,
-    units: units.data
+    units: unitRows
       .filter((u) => u.grade_level_id === grade.id)
       .map((u) => ({ ...u, lessons: lessonsByUnit.get(u.id) ?? [] })),
   }));

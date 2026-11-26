@@ -1,0 +1,38 @@
+# Copyrighted source material (textbooks, teacher's study guides). Never commit.
+/Sec 1/
+/Sec 2/
+*.pdf
+*.docx
+*.xlsx
+!tests/fixtures/**/*.xlsx
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies and builds
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Test output
+test-results/
+playwright-report/
+blob-report/
+screenshots/tmp/
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.claude/settings.local.json

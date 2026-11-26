@@ -1,0 +1,79 @@
+/*
+ * Design tokens — docs/M0-PLAN.md §5.
+ * Light = the notebook page. Dark = the classroom blackboard (designed, not inverted).
+ * Domain accents: one per unit world; colour means "which unit", fill means "how well you know it".
+ * All text colours measured ≥ 4.5:1 (WCAG AA) on their surfaces.
+ */
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --paper: #f3f5f6;        /* Chalk paper */
+  --surface: #ffffff;      /* Sheet */
+  --ink: #15212b;          /* Board ink (14.9:1) */
+  --pencil: #52606b;       /* Pencil (5.9:1) */
+  --ruling: #d3dae0;       /* Ruling */
+  --margin: #b92828;       /* Margin red: exam trap, errors */
+  --focus: #1c5ab2;
+
+  --d-society: #0d6e6a;
+  --d-cipher: #5b3dbf;
+  --d-protocol: #1c5ab2;
+  --d-swatch: #a8224e;
+  --d-data: #4d6b0e;
+  --d-signal: #8a5300;
+  --d-neuron: #8a2b86;
+  --d-programming: #15212b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #15231f;      /* Board */
+    --surface: #1c2d28;    /* Board raised */
+    --ink: #e9efeb;        /* Chalk (13.9:1) */
+    --pencil: #a9b8b1;     /* Chalk dust (7.9:1) */
+    --ruling: #2f443d;     /* Chalk line */
+    --margin: #f48a86;     /* Red chalk */
+    --focus: #8fb6f6;
+
+    --d-society: #6cd0c6;
+    --d-cipher: #b6a6f8;
+    --d-protocol: #8fb6f6;
+    --d-swatch: #f593b0;
+    --d-data: #b5d57a;
+    --d-signal: #edbf5e;
+    --d-neuron: #e59ddf;
+    --d-programming: #e9efeb;
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #15231f;
+  --surface: #1c2d28;
+  --ink: #e9efeb;
+  --pencil: #a9b8b1;
+  --ruling: #2f443d;
+  --margin: #f48a86;
+  --focus: #8fb6f6;
+
+  --d-society: #6cd0c6;
+  --d-cipher: #b6a6f8;
+  --d-protocol: #8fb6f6;
+  --d-swatch: #f593b0;
+  --d-data: #b5d57a;
+  --d-signal: #edbf5e;
+  --d-neuron: #e59ddf;
+  --d-programming: #e9efeb;
+}
+
+/* Setting a domain class scopes --accent to that unit world. */
+.domain-society { --accent: var(--d-society); }
+.domain-cipher { --accent: var(--d-cipher); }
+.domain-protocol { --accent: var(--d-protocol); }
+.domain-swatch { --accent: var(--d-swatch); }
+.domain-data { --accent: var(--d-data); }
+.domain-signal { --accent: var(--d-signal); }
+.domain-neuron { --accent: var(--d-neuron); }
+.domain-programming { --accent: var(--d-programming); }

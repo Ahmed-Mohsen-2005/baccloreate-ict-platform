@@ -15,7 +15,8 @@ export const getCurriculum = cache(async (): Promise<CurriculumGrade[]> => {
     supabase.from("units").select("*").order("position"),
     supabase.from("lessons").select("*").order("position"),
   ]);
-  if (grades.error || units.error || lessons.error) throw new Error("Could not load the curriculum");
+  const failure = grades.error ?? units.error ?? lessons.error;
+  if (failure) throw new Error(`Could not load the curriculum: ${failure.message}`);
 
   const lessonsByUnit = new Map<string, CurriculumLesson[]>();
   for (const lesson of lessons.data) {

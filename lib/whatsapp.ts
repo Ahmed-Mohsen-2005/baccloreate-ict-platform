@@ -1,4 +1,4 @@
-import { formatCode } from "./codes";
+import { formatCode } from "./code-format";
 
 /** WhatsApp click-to-chat link. The text is prefilled; the teacher presses send. */
 export function buildWaLink(e164: string, text: string): string {

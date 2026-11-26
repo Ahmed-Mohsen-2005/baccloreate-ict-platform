@@ -25,7 +25,4 @@ export function hmacCode(code: string, pepper: string): string {
   return createHmac("sha256", pepper).update(code).digest("hex");
 }
 
-/** For showing a code to a human: "ABC 123". */
-export function formatCode(code: string): string {
-  return `${code.slice(0, 3)} ${code.slice(3)}`;
-}
+export { formatCode } from "./code-format";

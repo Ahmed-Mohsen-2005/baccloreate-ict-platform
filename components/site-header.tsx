@@ -31,7 +31,7 @@ export async function SiteHeader({
   ] as const;
 
   return (
-    <header className="border-b border-ruling bg-paper">
+    <header className="glass-header border-b border-ruling">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
         <Link href="/" className="flex items-center gap-2 font-display text-lg font-extrabold no-underline">
           <BrandMark />

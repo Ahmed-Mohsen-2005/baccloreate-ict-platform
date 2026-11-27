@@ -48,8 +48,13 @@
   "landing": {
     "title": "Programming and Artificial Intelligence",
     "subtitle": "The Baccalaureate curriculum, lesson by lesson",
-    "heroLead": "Every unit has something you can try with your own hands. Hover or tap a unit and see what happens inside it.",
+    "heroTitle": "Learn programming and AI by doing",
+    "heroLead": "Lessons, interactive simulations, live quizzes and parent follow-up, all in one place. Tap any unit in the orbit and see what's inside.",
+    "orbitLabel": "Grade 11 units",
     "benchLabel": "Curriculum units",
+    "marqueeLabel": "Every lesson in the curriculum",
+    "ctaBandTitle": "Ready to start?",
+    "ctaBandBody": "Sign in with the code you got on WhatsApp, or send a join request and your teacher will reply.",
     "contents": "Contents",
     "term": "Term {n}",
     "wholeYear": "One book for the whole year",
@@ -67,6 +72,50 @@
     "years": "{count, plural, one {# year of experience} other {# years of experience}}",
     "ctaLogin": "Sign in with your code",
     "ctaJoin": "Request to join"
+  },
+  "showcase": {
+    "title": "Everything a class needs, in one place",
+    "intro": "The teacher runs the class, students practise, parents follow along. Anything the AI writes is reviewed by the teacher first.",
+    "chipsLabel": "More features",
+    "cards": {
+      "quiz": { "title": "Live quiz in class", "body": "A room code, students join from their phones, and results appear in front of you as they come in." },
+      "attendance": { "title": "Attendance in one tap or QR", "body": "A code that changes for online classes, a QR for in-person ones, and a manual override." },
+      "mastery": { "title": "Your knowledge map", "body": "Each lesson code fills with the unit's colour as you improve, so you see what to work on at a glance." },
+      "tutor": { "title": "AI lesson assistant", "body": "It asks guiding questions instead of handing over homework answers, and only draws on the teacher's notes and the textbook." },
+      "report": { "title": "Weekly parent report", "body": "A short summary on WhatsApp: a strength, one thing to improve and one step at home. The teacher reviews it before it's sent." },
+      "scan": { "title": "Scan paper answer sheets", "body": "Photograph the sheet with a phone and it's marked in a second; unclear sheets come back for you to check." },
+      "copilot": { "title": "Ask your data", "body": "Type a plain question and get the answer, no SQL needed. Read-only, always." },
+      "labs": { "title": "Simulations and a code lab", "body": "Try it by hand: encrypt a message, set up a firewall, run Python and watch variables in boxes." }
+    },
+    "mock": {
+      "room": "Room",
+      "question": "Question 3 of 10",
+      "code": "Check-in code",
+      "studentAsk": "What is the avalanche effect?",
+      "tutorReply": "Try changing one letter in the message and look at the hash. What do you notice?",
+      "reportTitle": "This week: Sara",
+      "reportBody": "Attended 3 of 3 classes. Strongest area: Cybersecurity. Needs review in 2-2, so solve 5 questions together this week.",
+      "reviewed": "Reviewed by the teacher before sending",
+      "copilotAsk": "Who missed two classes and is under 50% in 2-1?",
+      "names": ["Sara", "Omar", "Malak"],
+      "teacherOnly": "Teacher only",
+      "shift": "Shift 3"
+    },
+    "chips": [
+      "Sign in with a code or Google",
+      "Import students from Excel",
+      "Send codes on WhatsApp",
+      "PDF notes watermarked with the student's name",
+      "Question bank",
+      "Exams with several variants",
+      "Smart homework per student",
+      "Short-answer grading",
+      "Copy detection for code",
+      "Group announcements",
+      "Early alerts for students who need follow-up",
+      "AI cost dashboard",
+      "Works offline as an app"
+    ]
   },
   "unitPage": {
     "back": "All units",

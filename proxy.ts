@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import createIntlMiddleware from "next-intl/middleware";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 
 const intl = createIntlMiddleware(routing);
@@ -11,6 +11,17 @@ const intl = createIntlMiddleware(routing);
  * layout (server-side) and in Postgres RLS, never only here.
  */
 export default async function proxy(request: NextRequest) {
+  // If the Google sign-in comes back to the home page ("/?code=…", which Supabase does when the
+  // callback address isn't in its Redirect URLs list), finish the sign-in instead of showing the landing page.
+  const { pathname, searchParams } = request.nextUrl;
+  const authCode = searchParams.get("code");
+  if ((pathname === "/" || pathname === "/en") && authCode && /^[0-9a-f-]{36}$/i.test(authCode)) {
+    const target = new URL("/auth/callback", request.nextUrl.origin);
+    target.searchParams.set("code", authCode);
+    target.searchParams.set("locale", pathname === "/en" ? "en" : "ar");
+    return NextResponse.redirect(target);
+  }
+
   const response = intl(request);
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

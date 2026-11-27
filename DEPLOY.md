@@ -2,7 +2,7 @@
 
 Everything runs on free tiers (docs/M0-PLAN.md §1b). You need free accounts on **Supabase**, **Vercel**, **GitHub** and **Google Cloud** (for Google sign-in). You create the accounts and paste the keys yourself; secrets never go into chat, the repo or any file except `.env.local` and Vercel's settings.
 
-Commands below are for PowerShell on Windows.
+Commands below are for PowerShell on Windows. Use Node.js 24.x (`.nvmrc` records the project version); Vercel supports Node.js 24.x for builds and functions.
 
 ---
 
@@ -21,7 +21,8 @@ Commands below are for PowerShell on Windows.
      4. `supabase/migrations/20261127000004_teaching_core.sql` (attendance, announcements, materials)
      5. `supabase/migrations/20261127000005_storage_limits.sql` (file type and size limits for uploads)
      6. `supabase/migrations/20261127000006_platform_name.sql` (platform name setting)
-     7. `supabase/seed.sql` (the curriculum; run it once only, and only on a fresh project)
+     7. `supabase/migrations/20261128000007_topics.sql` (default lesson topics and automatic creation for new lessons)
+     8. `supabase/seed.sql` (the curriculum; run it once only, and only on a fresh project)
 
      Upgrading an existing project? Run only the new migration files you haven't run yet, in order. Never re-run `seed.sql`.
    - Each should end with "Success. No rows returned".
@@ -61,6 +62,8 @@ If you ever change it, every existing code stops working and you have to send ne
 ```powershell
 npm install
 ```
+
+The production build uses Next.js's Webpack compiler. On Windows, the default Turbopack CSS worker currently exits before compilation finishes; Webpack completes the production build with the same route and type checks.
 
 ```powershell
 npm run dev

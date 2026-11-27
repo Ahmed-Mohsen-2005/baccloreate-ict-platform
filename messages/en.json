@@ -240,6 +240,11 @@
         "neuron": "Artificial intelligence",
         "programming": "Programming"
       },
+      "topics": "Lesson topics",
+      "topicsForLesson": "Topics for lesson {code}",
+      "addTopic": "Add topic",
+      "deleteTopic": "Delete",
+      "deleteTopicNamed": "Delete topic {title}",
       "addLesson": "Add lesson",
       "addUnit": "Add unit",
       "deleteLesson": "Delete lesson",

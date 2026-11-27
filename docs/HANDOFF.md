@@ -43,6 +43,7 @@ A production web platform for the **Egyptian Baccalaureate ICT subject "Programm
 | M1 Foundation | Done, deployed, and signed in with Google as a teacher on the live site. |
 | Redesign (not a numbered milestone) | Done: object workbench, futuristic landing, unit pages. |
 | M2 Teaching core | **Code complete and tested; not yet verified on the live Supabase project.** |
+| Cross-cutting prerequisite 3.1 (topics) | In progress on branch `m3-topics`: default topic migration, per-lesson editor and PGlite coverage. |
 | M3 Assessment | Not started. |
 | M4 AI layer | Not started. |
 | M5 Tutor and insight | Not started. |
@@ -61,7 +62,7 @@ A production web platform for the **Egyptian Baccalaureate ICT subject "Programm
 - Consent history in `consents` (`import_attested`, `signup_checkbox`, `parent_portal`); parents confirm in their portal (`app.confirm_consent`).
 
 **Curriculum (M1)**
-- `grade_levels → units → lessons → topics`, bilingual, seeded in `supabase/seed.sql` from the textbooks' contents pages (confirmed by the owners). Editor at `/t/curriculum` (edit, add, reorder, delete). **`topics` has no UI and no rows yet.**
+- `grade_levels → units → lessons → topics`, bilingual, seeded in `supabase/seed.sql` from the textbooks' contents pages (confirmed by the owners). The `/t/curriculum` editor supports editing, adding, reordering and deleting curriculum rows. The topics slice adds one `General` / `عام` topic to every lesson, creates it automatically for new lessons, and adds per-lesson topic CRUD/reordering.
 - Public pages: landing `/`, unit pages `/units/<grade>/<code>`, privacy `/privacy`.
 
 **Teaching core (M2)**
@@ -80,6 +81,7 @@ A production web platform for the **Egyptian Baccalaureate ICT subject "Programm
 - Unit objects (`components/unit-object.tsx`): one SVG per domain (node graph, cipher wheel, request/response packets, swatches, data table, scatter + regression line, neural layers, variable boxes), animated on hover/focus/press via `.tile`.
 - Landing (`app/[locale]/page.tsx`): hero stage (gradient-shine headline, pointer-reactive particle network `components/particle-field.tsx`, CSS-only orbit of the seven unit worlds `components/hero-orbit.tsx`), lesson-code marquee, unit bench (bento), feature showcase (`components/feature-showcase.tsx`, designed previews of every planned feature), call to action. Scroll reveals use CSS scroll-driven animations as progressive enhancement.
 - Cybersecurity unit signature: lesson titles show as cipher text and decrypt on tap (`components/decrypt-title.tsx`).
+- Owner feedback (2026-11-27): the interior experience feels too traditional and should get a separate design pass with a professional, animated, glassmorphic and programming-based direction. Keep the current slice focused on topic management; scope the visual redesign independently.
 
 ---
 
@@ -153,7 +155,7 @@ Not built from M1/M2 scope of the brief:
 - **Audit coverage**: only access codes, student edits/deletes and the teacher allow-list are audited; the brief also asks for grade changes, exports and deletions.
 - **AI on/off switches per feature** (the `site_settings.ai_features` column exists, unused).
 - **Playwright**: installed, no config, no tests.
-- **Topics**: table exists with no rows or UI, but mastery and question tagging depend on it.
+- **Topics deployment**: migration `20261128000007_topics.sql` must be applied to Supabase before the new topic editor is deployed.
 - **Cron**: no `/api/cron/*` routes or `vercel.json` yet (the keep-alive for the free Supabase project, rate-limit purge and scheduled work all need it; Vercel Hobby allows daily crons only).
 - **Backups**: weekly encrypted dump via GitHub Actions is planned, not built.
 - M2 has **never been exercised against the live Supabase project**. The owners must run migrations 4–6 and test a real class (create a group with today's schedule, start check-in, check in as a test student, upload a PDF, open it as a student).

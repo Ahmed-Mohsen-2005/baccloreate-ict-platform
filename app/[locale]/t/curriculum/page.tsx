@@ -3,13 +3,14 @@ import { LessonCode } from "@/components/lesson-code";
 import { LocalizedTitle } from "@/components/localized-title";
 import { Button, Input, PageTitle, Select } from "@/components/ui";
 import { Link } from "@/i18n/navigation";
-import { getCurriculum, localTitle, type CurriculumUnit } from "@/lib/curriculum";
+import { getCurriculum, getTopics, localTitle, type CurriculumUnit } from "@/lib/curriculum";
 import { DOMAINS, domainClass } from "@/lib/db/domain";
-import { addLesson, addUnit, deleteLesson, move, updateLesson, updateUnit } from "./actions";
+import type { TopicRow } from "@/lib/db/types";
+import { addLesson, addTopic, addUnit, deleteLesson, deleteTopic, move, updateLesson, updateTopic, updateUnit } from "./actions";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ grade?: string }> };
 
-function MoveButtons({ table, id, labels }: { table: "units" | "lessons"; id: string; labels: { up: string; down: string } }) {
+function MoveButtons({ table, id, labels }: { table: "units" | "lessons" | "topics"; id: string; labels: { up: string; down: string } }) {
   return (
     <form action={move} className="flex gap-1">
       <input type="hidden" name="table" value={table} />
@@ -30,7 +31,10 @@ export default async function CurriculumEditor({ params, searchParams }: Props) 
   const { grade: gradeParam } = await searchParams;
   const t = await getTranslations("teacher.curriculum");
   const tc = await getTranslations("common");
-  const curriculum = await getCurriculum();
+  const [curriculum, topics] = await Promise.all([getCurriculum(), getTopics()]);
+  const topicsByLesson = new Map<string, TopicRow[]>();
+  for (const topic of topics) topicsByLesson.set(topic.lesson_id, [...(topicsByLesson.get(topic.lesson_id) ?? []), topic]);
+  const lessonTopics = (lessonId: string) => topicsByLesson.get(lessonId) ?? [];
   const grades = [...curriculum].reverse();
   const grade = grades.find((g) => g.code === gradeParam) ?? grades[0];
   const moveLabels = { up: tc("moveUp"), down: tc("moveDown") };
@@ -99,6 +103,19 @@ export default async function CurriculumEditor({ params, searchParams }: Props) 
     </div>
   );
 
+  const topicFields = (topic?: TopicRow) => (
+    <div className="grid gap-2 sm:grid-cols-2">
+      <label className="flex flex-col text-xs">
+        {t("titleEn")}
+        <Input name="title_en" defaultValue={topic?.title_en} required dir="ltr" maxLength={120} />
+      </label>
+      <label className="flex flex-col text-xs">
+        {t("titleAr")}
+        <Input name="title_ar" defaultValue={topic?.title_ar ?? ""} dir="rtl" maxLength={300} />
+      </label>
+    </div>
+  );
+
   return (
     <>
       <PageTitle intro={t("intro")}>{t("title")}</PageTitle>
@@ -163,6 +180,42 @@ export default async function CurriculumEditor({ params, searchParams }: Props) 
                           </Button>
                         </form>
                       </details>
+                      <section aria-label={t("topicsForLesson", { code: lesson.code })} className="mt-4 rounded-[var(--radius-control)] border border-ruling bg-paper p-3">
+                        <h4 className="text-sm font-bold">{t("topics")}</h4>
+                        <ol className="mt-2 divide-y divide-ruling">
+                          {lessonTopics(lesson.id).map((topic) => (
+                            <li key={topic.id} className="flex items-start gap-2 py-2">
+                              <form action={updateTopic} className="flex min-w-0 flex-1 flex-col gap-2">
+                                <input type="hidden" name="id" value={topic.id} />
+                                {topicFields(topic)}
+                                <Button type="submit" variant="secondary" className="self-start">
+                                  {tc("save")}
+                                </Button>
+                              </form>
+                              <MoveButtons table="topics" id={topic.id} labels={moveLabels} />
+                              {lessonTopics(lesson.id).length > 1 && (
+                                <form action={deleteTopic}>
+                                  <input type="hidden" name="id" value={topic.id} />
+                                  <input type="hidden" name="lesson_id" value={lesson.id} />
+                                  <Button type="submit" variant="danger" aria-label={t("deleteTopicNamed", { title: locale === "ar" && topic.title_ar ? topic.title_ar : topic.title_en })}>
+                                    {t("deleteTopic")}
+                                  </Button>
+                                </form>
+                              )}
+                            </li>
+                          ))}
+                        </ol>
+                        <details className="mt-3">
+                          <summary className="cursor-pointer text-sm font-semibold">{t("addTopic")}</summary>
+                          <form action={addTopic} className="mt-3 flex flex-col gap-2">
+                            <input type="hidden" name="lesson_id" value={lesson.id} />
+                            {topicFields()}
+                            <Button type="submit" variant="secondary" className="self-start">
+                              {t("addTopic")}
+                            </Button>
+                          </form>
+                        </details>
+                      </section>
                     </details>
                     <MoveButtons table="lessons" id={lesson.id} labels={moveLabels} />
                   </li>

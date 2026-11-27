@@ -30,6 +30,11 @@ const unitSchema = z.object({
   domain: z.enum(DOMAINS),
 });
 
+const topicSchema = z.object({
+  title_en: z.string().trim().min(1).max(120),
+  title_ar: optionalText,
+});
+
 const uuid = z.uuid();
 
 function fields(formData: FormData, keys: string[]) {
@@ -69,6 +74,38 @@ export async function deleteLesson(formData: FormData) {
   refresh();
 }
 
+export async function updateTopic(formData: FormData) {
+  const supabase = await guard();
+  const id = uuid.parse(formData.get("id"));
+  const data = topicSchema.parse(fields(formData, ["title_en", "title_ar"]));
+  const { error } = await supabase.from("topics").update(data).eq("id", id);
+  if (error) throw new Error(`Could not update topic: ${error.message}`);
+  refresh();
+}
+
+export async function addTopic(formData: FormData) {
+  const supabase = await guard();
+  const lessonId = uuid.parse(formData.get("lesson_id"));
+  const data = topicSchema.parse(fields(formData, ["title_en", "title_ar"]));
+  const { count, error: countError } = await supabase.from("topics").select("id", { count: "exact", head: true }).eq("lesson_id", lessonId);
+  if (countError) throw new Error(`Could not count lesson topics: ${countError.message}`);
+  const { error } = await supabase.from("topics").insert({ ...data, lesson_id: lessonId, position: (count ?? 0) + 1 });
+  if (error) throw new Error(`Could not add topic: ${error.message}`);
+  refresh();
+}
+
+export async function deleteTopic(formData: FormData) {
+  const supabase = await guard();
+  const id = uuid.parse(formData.get("id"));
+  const lessonId = uuid.parse(formData.get("lesson_id"));
+  const { count, error: countError } = await supabase.from("topics").select("id", { count: "exact", head: true }).eq("lesson_id", lessonId);
+  if (countError) throw new Error(`Could not count lesson topics: ${countError.message}`);
+  if ((count ?? 0) <= 1) return;
+  const { error } = await supabase.from("topics").delete().eq("id", id).eq("lesson_id", lessonId);
+  if (error) throw new Error(`Could not delete topic: ${error.message}`);
+  refresh();
+}
+
 export async function updateUnit(formData: FormData) {
   const supabase = await guard();
   const id = uuid.parse(formData.get("id"));
@@ -89,7 +126,7 @@ export async function addUnit(formData: FormData) {
 /** Moves a unit or lesson one step up/down among its siblings, then saves the whole order at once. */
 export async function move(formData: FormData) {
   const supabase = await guard();
-  const table = z.enum(["units", "lessons"]).parse(formData.get("table"));
+  const table = z.enum(["units", "lessons", "topics"]).parse(formData.get("table"));
   const id = uuid.parse(formData.get("id"));
   const dir = formData.get("dir") === "up" ? -1 : 1;
 
@@ -100,6 +137,12 @@ export async function move(formData: FormData) {
           const { data } = await supabase.from("lessons").select("id").eq("unit_id", row?.unit_id ?? "").order("position");
           return data ?? [];
         })()
+      : table === "topics"
+        ? await (async () => {
+            const { data: row } = await supabase.from("topics").select("lesson_id").eq("id", id).single();
+            const { data } = await supabase.from("topics").select("id").eq("lesson_id", row?.lesson_id ?? "").order("position");
+            return data ?? [];
+          })()
       : await (async () => {
           const { data: row } = await supabase.from("units").select("grade_level_id").eq("id", id).single();
           const { data } = await supabase.from("units").select("id").eq("grade_level_id", row?.grade_level_id ?? "").order("position");

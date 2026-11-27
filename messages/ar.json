@@ -240,6 +240,11 @@
         "neuron": "ذكاء اصطناعي",
         "programming": "برمجة"
       },
+      "topics": "موضوعات الدرس",
+      "topicsForLesson": "موضوعات درس {code}",
+      "addTopic": "ضيف موضوع",
+      "deleteTopic": "امسح",
+      "deleteTopicNamed": "امسح موضوع {title}",
       "addLesson": "ضيف درس",
       "addUnit": "ضيف وحدة",
       "deleteLesson": "امسح الدرس",

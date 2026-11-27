@@ -15,6 +15,8 @@ Every dependency and why it's here. None of them sends user data anywhere.
 | `papaparse` | Reading `.csv` student files |
 | `@radix-ui/react-dialog`, `-tabs`, `-select` | Accessible primitives for upcoming screens (our own styling) |
 | `server-only` | Build error if server code (keys, admin client) is imported by a client component |
+| `qrcode` | Draws the attendance check-in QR in the browser (no request to any QR service) |
+| `pdf-lib` | Stamps the student's ID on every page of a protected PDF, on our own server |
 
 ## Development
 

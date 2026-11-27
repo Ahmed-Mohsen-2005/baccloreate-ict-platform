@@ -18,7 +18,11 @@ Commands below are for PowerShell on Windows.
      1. `supabase/migrations/20261126000001_foundation.sql`
      2. `supabase/migrations/20261126000002_onboarding_functions.sql`
      3. `supabase/migrations/20261126000003_service_wrappers.sql`
-     4. `supabase/seed.sql` (the curriculum; run it once only)
+     4. `supabase/migrations/20261127000004_teaching_core.sql` (attendance, announcements, materials)
+     5. `supabase/migrations/20261127000005_storage_limits.sql` (file type and size limits for uploads)
+     6. `supabase/seed.sql` (the curriculum; run it once only, and only on a fresh project)
+
+     Upgrading an existing project? Run only the new migration files you haven't run yet, in order. Never re-run `seed.sql`.
    - Each should end with "Success. No rows returned".
 3. **Settings → API Keys**: copy the **Project URL**, the **publishable key** and the **secret key** (you'll paste them in step 4). The secret key is a password: never share it.
 

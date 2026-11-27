@@ -173,6 +173,54 @@ export type AuditLogRow = Stamps & {
   after: Json | null;
 };
 
+export type AttendanceStatus = "present" | "late" | "absent";
+export type AttendanceMethod = "tap" | "qr" | "code" | "override";
+export type AnnouncementAudience = "group" | "grade" | "all_students" | "all_parents";
+export type MaterialKind = "pdf" | "image" | "video_link" | "link" | "note";
+
+export type ClassSessionRow = Stamps & {
+  id: string;
+  group_id: string;
+  starts_at: string;
+  ends_at: string;
+  lesson_id: string | null;
+  checkin_code: string | null;
+  checkin_expires_at: string | null;
+};
+export type AttendanceRow = Stamps & {
+  id: string;
+  session_id: string;
+  student_id: string;
+  status: AttendanceStatus;
+  method: AttendanceMethod;
+  marked_by: string | null;
+  marked_at: string;
+};
+export type AnnouncementRow = Stamps & {
+  id: string;
+  audience: AnnouncementAudience;
+  group_id: string | null;
+  grade_level_id: string | null;
+  title: string;
+  body: string;
+  publish_at: string;
+  created_by: string | null;
+};
+export type MaterialRow = Stamps & {
+  id: string;
+  title: string;
+  kind: MaterialKind;
+  storage_key: string | null;
+  url: string | null;
+  body: string | null;
+  grade_level_id: string;
+  lesson_id: string | null;
+  edition: Edition | null;
+  release_at: string | null;
+  watermark: boolean;
+  created_by: string | null;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -201,6 +249,16 @@ export type Database = {
       join_requests: Table<JoinRequestRow, "id" | "edition" | "gender" | "student_phone" | "student_email" | "parent_email" | "status" | "decided_at" | "student_id">;
       messages: Table<MessageRow, "id" | "channel" | "recipient_parent_id" | "payload" | "status" | "provider_ref">;
       audit_log: Table<AuditLogRow, "id" | "actor" | "entity_id" | "before" | "after">;
+      class_sessions: Table<ClassSessionRow, "id" | "lesson_id" | "checkin_code" | "checkin_expires_at">;
+      attendance: Table<AttendanceRow, "id" | "marked_by" | "marked_at">;
+      announcements: Table<AnnouncementRow, "id" | "group_id" | "grade_level_id" | "publish_at" | "created_by">;
+      materials: Table<MaterialRow, "id" | "storage_key" | "url" | "body" | "lesson_id" | "edition" | "release_at" | "watermark" | "created_by">;
+      material_groups: {
+        Row: { material_id: string; group_id: string };
+        Insert: { material_id: string; group_id: string };
+        Update: Partial<{ material_id: string; group_id: string }>;
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: {
@@ -211,6 +269,7 @@ export type Database = {
       reorder: { Args: { p_table: string; p_ids: string[] }; Returns: undefined };
       hit_rate_limit: { Args: { p_key: string; p_window_seconds: number; p_max: number }; Returns: boolean };
       purge_rate_limits: { Args: Record<string, never>; Returns: undefined };
+      check_in: { Args: { p_code: string }; Returns: string };
     };
     Enums: {
       user_role: UserRole;
@@ -224,6 +283,10 @@ export type Database = {
       consent_kind: ConsentKind;
       consent_method: ConsentMethod;
       message_status: MessageStatus;
+      attendance_status: AttendanceStatus;
+      attendance_method: AttendanceMethod;
+      announcement_audience: AnnouncementAudience;
+      material_kind: MaterialKind;
     };
     CompositeTypes: { [_ in never]: never };
   };

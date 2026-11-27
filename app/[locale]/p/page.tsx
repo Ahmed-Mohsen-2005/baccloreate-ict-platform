@@ -25,6 +25,16 @@ export default async function ParentHome({ params }: { params: Promise<{ locale:
     ? await supabase.from("groups").select("id, name, schedule").in("id", groupIds)
     : { data: [] as { id: string; name: string; schedule: unknown }[] };
   const groupById = new Map((groups ?? []).map((g) => [g.id, g]));
+
+  // Attendance over the last 30 days, per child (RLS limits this to the parent's own children).
+  const since = new Date(new Date().getTime() - 30 * 24 * 3600_000).toISOString();
+  const { data: marks } = await supabase.from("attendance").select("student_id, status").gte("marked_at", since);
+  const tally = new Map<string, { present: number; late: number; absent: number }>();
+  for (const m of marks ?? []) {
+    const row = tally.get(m.student_id) ?? { present: 0, late: 0, absent: 0 };
+    row[m.status] += 1;
+    tally.set(m.student_id, row);
+  }
   const confirmed = new Set((consents ?? []).filter((c) => c.parent_id === viewer.subjectId).map((c) => c.student_id));
   const weekdays = tg.raw("weekdays") as string[];
   const firstNames = (children ?? []).map((c) => c.display_name.split(" ")[0] ?? c.display_name);
@@ -58,6 +68,7 @@ export default async function ParentHome({ params }: { params: Promise<{ locale:
               {slots.length > 0 && (
                 <p>{t("schedule", { slots: slots.map((s) => `${weekdays[s.weekday]} ${s.start}`).join(locale === "ar" ? "، " : ", ") })}</p>
               )}
+              <p className="font-semibold">{tally.has(child.id) ? t("attendanceSummary", tally.get(child.id)!) : t("noAttendanceYet")}</p>
               <p className="text-base text-pencil">{t("comingSoon", { name: child.display_name.split(" ")[0] ?? child.display_name })}</p>
             </Sheet>
           );

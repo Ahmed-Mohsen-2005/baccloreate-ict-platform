@@ -193,6 +193,7 @@
       "curriculum": "Curriculum",
       "joinRequests": "Join requests",
       "codes": "Send codes",
+      "attendance": "Attendance",
       "settings": "Settings"
     },
     "dashboard": {
@@ -353,6 +354,28 @@
       "filterAll": "All",
       "noTitle": "Add your title in settings (like “Mr …”) so it appears in the message."
     },
+    "attendance": {
+      "title": "Attendance",
+      "intro": "Today's classes. Open one and mark attendance with a tap, or start the code and QR so students check in themselves.",
+      "noSessions": "No classes today. Make sure every group has a weekly schedule.",
+      "roster": "Students",
+      "counts": "Present {present}, late {late}, absent {absent}",
+      "allPresent": "All present",
+      "saveFailed": "Couldn't save. Check your connection and try again.",
+      "present": "Present",
+      "late": "Late",
+      "absent": "Absent",
+      "methods": { "tap": "By tap", "qr": "QR", "code": "By code", "override": "Edited" },
+      "checkin": "Let students check in",
+      "checkinHint": "Online students type the code on your screen; in-person students scan the QR. The code changes every minute.",
+      "code": "Code",
+      "rotatesIn": "Changes in {seconds} seconds",
+      "qrLabel": "Check-in QR code",
+      "newCode": "New code",
+      "startCheckin": "Start check-in",
+      "stopCheckin": "Stop check-in",
+      "emptyGroup": "This group has no students yet."
+    },
     "joinRequests": {
       "title": "Join requests",
       "empty": "No requests waiting.",
@@ -388,6 +411,20 @@
     }
   },
   "student": {
+    "checkin": {
+      "title": "Check in",
+      "intro": "Enter the code your teacher is showing, or scan the QR.",
+      "codeLabel": "Check-in code",
+      "hint": "4 digits",
+      "submit": "Check me in",
+      "done": "You're checked in. Have a great class!",
+      "errors": {
+        "invalid": "That code is wrong or has expired. Ask your teacher for the current one.",
+        "rateLimited": "Too many attempts. Wait 10 minutes and try again.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
+    "checkinButton": "Check in now",
     "hello": "Hi {name}",
     "yourGroup": "Your group: {group}",
     "noGroupYet": "Your teacher will place you in a group soon.",
@@ -397,6 +434,8 @@
     "mapComingSoon": "Lessons and study guides will show here as your teacher adds them."
   },
   "parent": {
+    "attendanceSummary": "Attendance, last 30 days: present {present}, late {late}, absent {absent}",
+    "noAttendanceYet": "No classes recorded yet.",
     "hello": "Hello, parent of {names}",
     "consentTitle": "We need your consent",
     "consentBody": "Your teacher registered {name} on the platform for academic follow-up. We store: name, grade, group, attendance and results, plus a mobile number and email if given. We never store a national ID or address.",

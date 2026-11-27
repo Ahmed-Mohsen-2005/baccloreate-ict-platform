@@ -50,6 +50,39 @@ export function nextSession(slots: ScheduleSlot[], now: Date, timeZone = "Africa
   return best;
 }
 
+function tzOffsetMinutes(date: Date, timeZone: string): number {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23",
+  }).formatToParts(date);
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
+  const asUtc = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"), get("second"));
+  return (asUtc - date.getTime()) / 60000;
+}
+
+/** The UTC instant at which the wall clock in `timeZone` reads y-m-d h:mi (handles daylight saving). */
+export function zonedToUtc(y: number, m: number, d: number, h: number, mi: number, timeZone: string): Date {
+  const guess = Date.UTC(y, m - 1, d, h, mi);
+  const once = guess - tzOffsetMinutes(new Date(guess), timeZone) * 60000;
+  return new Date(guess - tzOffsetMinutes(new Date(once), timeZone) * 60000);
+}
+
+/** Sessions the weekly `slots` produce on the calendar day (in `timeZone`) that contains `date`. */
+export function sessionsOn(slots: ScheduleSlot[], date: Date, timeZone = "Africa/Cairo"): { startsAt: Date; endsAt: Date }[] {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(date);
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
+  const y = get("year");
+  const m = get("month");
+  const d = get("day");
+  const weekday = localClock(date, timeZone).weekday;
+  return slots
+    .filter((s) => s.weekday === weekday)
+    .map((s) => {
+      const [h, mi] = s.start.split(":").map(Number);
+      const startsAt = zonedToUtc(y, m, d, h ?? 0, mi ?? 0, timeZone);
+      return { startsAt, endsAt: new Date(startsAt.getTime() + s.minutes * 60000) };
+    });
+}
+
 /** Show "Join Meet" from 15 minutes before the start until the end. */
 export function canJoinNow(session: NextSession | null): boolean {
   return Boolean(session && (session.inProgress || session.minutesUntil <= 15));

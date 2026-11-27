@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canJoinNow, localClock, nextSession } from "@/lib/schedule";
+import { canJoinNow, localClock, nextSession, sessionsOn } from "@/lib/schedule";
 import { parseSchedule } from "@/lib/db/domain";
 
 // 2026-11-28 is a Saturday. Cairo is UTC+2 in November.
@@ -45,6 +45,35 @@ describe("nextSession", () => {
     expect(canJoinNow(nextSession(slots, new Date("2026-11-28T13:50:00Z")))).toBe(true); // 10 min before
     expect(canJoinNow(nextSession(slots, new Date("2026-11-28T13:30:00Z")))).toBe(false); // 30 min before
     expect(canJoinNow(nextSession(slots, new Date("2026-11-28T15:00:00Z")))).toBe(true); // in progress
+  });
+});
+
+describe("sessionsOn", () => {
+  const slots = [
+    { weekday: 6, start: "16:00", minutes: 90 },
+    { weekday: 2, start: "18:30", minutes: 60 },
+  ];
+
+  it("turns a Saturday slot into a UTC instant (Cairo winter time is UTC+2)", () => {
+    const [s] = sessionsOn(slots, new Date("2026-11-28T08:00:00Z"));
+    expect(s?.startsAt.toISOString()).toBe("2026-11-28T14:00:00.000Z");
+    expect(s?.endsAt.toISOString()).toBe("2026-11-28T15:30:00.000Z");
+  });
+
+  it("follows daylight saving (Cairo summer time is UTC+3)", () => {
+    const [s] = sessionsOn(slots, new Date("2026-07-04T08:00:00Z")); // a Saturday in July
+    expect(s?.startsAt.toISOString()).toBe("2026-07-04T13:00:00.000Z");
+  });
+
+  it("uses the Cairo calendar day, not the UTC day", () => {
+    // 23:30 UTC on Friday is already Saturday 01:30 in Cairo.
+    expect(sessionsOn(slots, new Date("2026-11-27T23:30:00Z"))).toHaveLength(1);
+    expect(sessionsOn(slots, new Date("2026-11-28T21:30:00Z"))).toHaveLength(1); // 23:30 Saturday in Cairo
+    expect(sessionsOn(slots, new Date("2026-11-28T22:30:00Z"))).toHaveLength(0); // 00:30 Sunday in Cairo
+  });
+
+  it("returns nothing on a day without slots", () => {
+    expect(sessionsOn(slots, new Date("2026-11-29T10:00:00Z"))).toEqual([]);
   });
 });
 

@@ -3,6 +3,7 @@ import { LessonCode } from "@/components/lesson-code";
 import { LocalizedTitle } from "@/components/localized-title";
 import { buttonClass } from "@/components/ui";
 import { UnitObject } from "@/components/unit-object";
+import { Link } from "@/i18n/navigation";
 import { requireRole } from "@/lib/auth/viewer";
 import { getCurriculum, localTitle } from "@/lib/curriculum";
 import { domainClass, parseSchedule } from "@/lib/db/domain";
@@ -29,10 +30,29 @@ export default async function StudentHome({ params }: { params: Promise<{ locale
   // Titles follow the student's book edition; Grade 10 is English only.
   const titleLocale = student.edition === "ar" ? "ar" : "en";
 
+  // A class is "live" from 30 minutes before it starts to 30 minutes after it ends (matches check_in()).
+  const nowMs = new Date().getTime();
+  const { data: liveSessions } = student.group_id
+    ? await supabase
+        .from("class_sessions")
+        .select("id")
+        .eq("group_id", student.group_id)
+        .lte("starts_at", new Date(nowMs + 30 * 60_000).toISOString())
+        .gte("ends_at", new Date(nowMs - 30 * 60_000).toISOString())
+        .limit(1)
+    : { data: [] };
+  const checkinOpen = (liveSessions ?? []).length > 0;
+
   return (
     <>
       <h1 className="text-2xl font-extrabold">{t("hello", { name: student.display_name.split(" ")[0] ?? student.display_name })}</h1>
       <p className="mt-1 text-pencil">{group ? t("yourGroup", { group: group.name }) : t("noGroupYet")}</p>
+
+      {checkinOpen && (
+        <Link href="/s/checkin" className={buttonClass("primary", "mt-4 min-h-14 w-full text-lg sm:w-auto sm:px-8")}>
+          {t("checkinButton")}
+        </Link>
+      )}
 
       {session && (
         <section className="mt-4 flex flex-col gap-3 rounded-[var(--radius-sheet)] border border-ruling bg-surface p-4">

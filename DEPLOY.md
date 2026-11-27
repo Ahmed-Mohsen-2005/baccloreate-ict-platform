@@ -72,7 +72,7 @@ npm run dev
 
 ## Partner teachers
 
-Any number of teachers can run the platform; each has full access to everything. To add one: sign in as a teacher → **Settings → Google emails allowed to sign in as teacher** → add their Gmail. They then sign in from **Sign in → Teacher → Sign in with Google** and land on the same dashboard. Emails listed in the `TEACHER_EMAILS` variable on Vercel are always allowed and cannot be removed from the app, so put every partner's Gmail there too (comma-separated) and redeploy; that way no partner can lock the other out by mistake. The audit log records which teacher made each change.
+Any number of teachers can run the platform; each has full access to everything. To add one: sign in as a teacher → **Settings → Google emails allowed to sign in as teacher** → add their Gmail. They then sign in from **Sign in → Teacher → Sign in with Google** and land on the same dashboard. Emails listed in the `TEACHER_EMAILS` variable on Vercel are always allowed and cannot be removed from the app, so put every partner's Gmail there too (comma-separated) and redeploy; that way no partner can lock the other out by mistake. Everything is shared: both teachers see and edit the same students, groups and content. The audit log records which teacher issued access codes, edited or deleted a student, or changed the allowed-teachers list; other edits are not attributed yet.
 
 ## 5. Put it online (Vercel)
 

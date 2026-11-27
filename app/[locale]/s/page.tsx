@@ -1,4 +1,5 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { AnnouncementFeed } from "@/components/announcement-feed";
 import { LessonCode } from "@/components/lesson-code";
 import { LocalizedTitle } from "@/components/localized-title";
 import { buttonClass } from "@/components/ui";
@@ -69,6 +70,8 @@ export default async function StudentHome({ params }: { params: Promise<{ locale
         </section>
       )}
 
+      <AnnouncementFeed />
+
       {grade && (
         <section aria-labelledby="curriculum-title" className="mt-8">
           <h2 id="curriculum-title" className="text-xl font-extrabold">
@@ -90,7 +93,9 @@ export default async function StudentHome({ params }: { params: Promise<{ locale
                   <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
                     {unit.lessons.map((lesson) => (
                       <li key={lesson.id} className={lesson.domain ? domainClass(lesson.domain) : ""}>
-                        <LessonCode code={lesson.code} size="lg" label={localTitle(lesson, titleLocale).text} />
+                        <Link href={`/s/lessons/${lesson.id}`} className="inline-block no-underline" aria-label={`${lesson.code}: ${localTitle(lesson, titleLocale).text}`}>
+                          <LessonCode code={lesson.code} size="lg" />
+                        </Link>
                       </li>
                     ))}
                   </ul>

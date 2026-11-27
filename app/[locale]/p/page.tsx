@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { AnnouncementFeed } from "@/components/announcement-feed";
 import { Button, Sheet, buttonClass } from "@/components/ui";
 import { requireRole } from "@/lib/auth/viewer";
 import { getSiteSettings } from "@/lib/curriculum";
@@ -74,6 +75,8 @@ export default async function ParentHome({ params }: { params: Promise<{ locale:
           );
         })}
       </div>
+
+      <AnnouncementFeed />
 
       {settings?.whatsapp_e164 && (
         <a

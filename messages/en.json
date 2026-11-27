@@ -117,6 +117,14 @@
       "Works offline as an app"
     ]
   },
+  "feed": { "title": "Announcements" },
+  "materials": {
+    "title": "Study materials",
+    "back": "Back to the curriculum",
+    "empty": "No materials for this lesson yet. They'll show here as soon as your teacher adds them.",
+    "open": "Open",
+    "kind": { "pdf": "PDF", "image": "Image", "video_link": "Video", "link": "Link", "note": "Note" }
+  },
   "unitPage": {
     "back": "All units",
     "lessonsTitle": "Lessons",
@@ -194,6 +202,8 @@
       "joinRequests": "Join requests",
       "codes": "Send codes",
       "attendance": "Attendance",
+      "announcements": "Announcements",
+      "materials": "Materials",
       "settings": "Settings"
     },
     "dashboard": {
@@ -353,6 +363,61 @@
       "filterUnsent": "Not sent",
       "filterAll": "All",
       "noTitle": "Add your title in settings (like “Mr …”) so it appears in the message."
+    },
+    "materials": {
+      "title": "Materials",
+      "intro": "Upload your study guides (PDF), images, links and notes, attach them to a lesson, and choose who sees them and when.",
+      "empty": "No materials yet. Upload your first one.",
+      "titleLabel": "Title",
+      "kind": "Type",
+      "file": "File",
+      "fileHint": "PDF or image, up to 50 MB.",
+      "url": "Link",
+      "urlHint": "Must start with https://",
+      "body": "Text",
+      "lesson": "Lesson",
+      "noLesson": "No lesson (whole grade)",
+      "bothEditions": "Both editions",
+      "releaseAt": "Release at (optional)",
+      "releaseHint": "Leave empty to show now. Cairo time.",
+      "groups": "Specific groups",
+      "groupsHint": "Leave empty to show to every group of the grade.",
+      "watermark": "Stamp the student's ID on every PDF page (so a leaked copy can be traced).",
+      "save": "Upload and publish",
+      "uploading": "Uploading…",
+      "saved": "Published.",
+      "open": "Open",
+      "scheduled": "Releases {date}",
+      "restricted": "Specific groups",
+      "watermarked": "Student ID stamped",
+      "errors": {
+        "file": "Choose a file.",
+        "type": "That type isn't supported. Use PDF, PNG, JPG or WebP.",
+        "size": "The file is larger than 50 MB. Make it smaller and try again.",
+        "fields": "Something is missing. Add the title and fill in the rest.",
+        "failed": "The upload failed. Check your connection and try again."
+      }
+    },
+    "announcements": {
+      "title": "Announcements",
+      "intro": "Send an announcement to a group, a grade, all students or all parents. It shows on their home screen.",
+      "audience": "Who is it for?",
+      "allStudents": "All students",
+      "allParents": "All parents",
+      "audienceGrade": "All {name} students",
+      "audienceGroup": "Group {name}",
+      "titleLabel": "Title",
+      "body": "Message",
+      "publishAt": "Publish at (optional)",
+      "publishAtHint": "Leave empty to publish now.",
+      "publish": "Publish",
+      "published": "Published.",
+      "scheduled": "Goes out {date}",
+      "empty": "No announcements yet.",
+      "errors": {
+        "fields": "Write a title and a message, and choose who it's for.",
+        "failed": "Couldn't publish. Try again."
+      }
     },
     "attendance": {
       "title": "Attendance",

@@ -13,6 +13,8 @@ export default async function TeacherLayout({ children, params }: { children: Re
   const nav = [
     { href: "/t", label: t("dashboard") },
     { href: "/t/attendance", label: t("attendance") },
+    { href: "/t/announcements", label: t("announcements") },
+    { href: "/t/materials", label: t("materials") },
     { href: "/t/students", label: t("students") },
     { href: "/t/codes", label: t("codes") },
     { href: "/t/groups", label: t("groups") },

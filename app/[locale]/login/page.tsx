@@ -7,14 +7,15 @@ import { getSiteSettings } from "@/lib/curriculum";
 import { startGoogleSignIn } from "./actions";
 import { CodeForm } from "./code-form";
 
-type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ as?: string; error?: string }> };
+type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ as?: string; error?: string; why?: string }> };
 
 const GOOGLE_ERRORS = ["google_unknown", "google_failed", "not_teacher", "generic"] as const;
 
 export default async function LoginPage({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { as, error } = await searchParams;
+  const { as, error, why } = await searchParams;
+  const reason = /^[a-z_]{2,20}$/.test(why ?? "") ? why : null; // short code for support, never free text
   const t = await getTranslations("login");
 
   const [viewer, settings] = await Promise.all([getViewer(), getSiteSettings()]);
@@ -48,7 +49,16 @@ export default async function LoginPage({ params, searchParams }: Props) {
         </nav>
 
         <div className="mt-6 flex flex-col gap-6">
-          {googleError && <Notice tone="error">{t(`errors.${googleError}`)}</Notice>}
+          {googleError && (
+            <Notice tone="error">
+              {t(`errors.${googleError}`)}
+              {reason && (
+                <span className="mt-1 block font-mono text-xs text-pencil" dir="ltr">
+                  code: {reason}
+                </span>
+              )}
+            </Notice>
+          )}
 
           {tab !== "teacher" && <CodeForm key={tab} kind={tab} />}
 

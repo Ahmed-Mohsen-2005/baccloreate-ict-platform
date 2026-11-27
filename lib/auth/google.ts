@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 export type GoogleIntent = "teacher" | "member";
 export type GoogleOutcome =
   | { ok: true; home: "/t" | "/s" | "/p" }
-  | { ok: false; error: "google_unknown" | "not_teacher" | "google_failed" };
+  | { ok: false; error: "google_unknown" | "not_teacher" | "google_failed"; why?: string };
 
 /**
  * Decides who a freshly signed-in Google user is (§9 Q15):
@@ -19,17 +19,25 @@ export async function resolveGoogleUser(intent: GoogleIntent): Promise<GoogleOut
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;
   const email = user?.email?.toLowerCase();
-  if (!user || !email || !user.email_confirmed_at) return { ok: false, error: "google_failed" };
+  if (!user) return { ok: false, error: "google_failed", why: "no_session" };
+  if (!email) return { ok: false, error: "google_failed", why: "no_email" };
+  if (!user.email_confirmed_at) return { ok: false, error: "google_failed", why: "unverified" };
 
   const admin = createAdminClient();
 
-  const { data: listed } = await admin.from("teacher_allowlist").select("email").eq("email", email).maybeSingle();
+  const { data: listed, error: listError } = await admin.from("teacher_allowlist").select("email").eq("email", email).maybeSingle();
+  // A database error here almost always means SUPABASE_SECRET_KEY is wrong (or the SQL migrations weren't run).
+  if (listError) {
+    console.error("google sign-in: allow-list query failed:", listError.message);
+    return { ok: false, error: "google_failed", why: "admin_key" };
+  }
   const isTeacher = teacherEmailsFromEnv().includes(email) || Boolean(listed);
 
   if (isTeacher) {
     await admin.from("account_links").delete().eq("user_id", user.id);
     const { error } = await admin.from("profiles").upsert({ user_id: user.id, role: "teacher" }, { onConflict: "user_id" });
-    return error ? { ok: false, error: "google_failed" } : { ok: true, home: "/t" };
+    if (error) console.error("google sign-in: teacher profile upsert failed:", error.message);
+    return error ? { ok: false, error: "google_failed", why: "profile" } : { ok: true, home: "/t" };
   }
 
   const forget = async (error: "google_unknown" | "not_teacher"): Promise<GoogleOutcome> => {
@@ -58,7 +66,10 @@ export async function resolveGoogleUser(intent: GoogleIntent): Promise<GoogleOut
   const { error: linkError } = await admin
     .from("account_links")
     .upsert({ user_id: user.id, ...match, method: "google" }, { onConflict: "user_id" });
-  if (profileError || linkError) return { ok: false, error: "google_failed" };
+  if (profileError || linkError) {
+    console.error("google sign-in: member link failed:", profileError?.message ?? linkError?.message);
+    return { ok: false, error: "google_failed", why: "link" };
+  }
 
   return { ok: true, home: match.subject_type === "student" ? "/s" : "/p" };
 }

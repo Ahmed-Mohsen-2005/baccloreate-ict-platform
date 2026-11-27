@@ -4,6 +4,7 @@ import { HeroOrbit, type OrbitUnit } from "@/components/hero-orbit";
 import { LessonCode } from "@/components/lesson-code";
 import { LocalizedTitle } from "@/components/localized-title";
 import { ParticleField } from "@/components/particle-field";
+import { platformName } from "@/lib/brand";
 import { SiteHeader } from "@/components/site-header";
 import { buttonClass } from "@/components/ui";
 import { UnitObject } from "@/components/unit-object";
@@ -30,7 +31,7 @@ export default async function Home({ params, searchParams }: Props) {
   const grades = [...curriculum].reverse(); // Grade 11 first
   const hero = grades[0];
   const selected = grades.find((g) => g.code === gradeParam) ?? hero;
-  const brand = settings?.teacher_title || t("title");
+  const brand = platformName(settings, locale, t("title"));
   const bio = locale === "ar" ? settings?.bio_ar : settings?.bio_en;
   const home = viewer ? homeFor(viewer.role) : "/login";
   const units = selected?.units ?? [];

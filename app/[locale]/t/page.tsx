@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Notice, PageTitle, Sheet, buttonClass } from "@/components/ui";
 import { Link } from "@/i18n/navigation";
+import { hasPlatformName } from "@/lib/brand";
 import { getSiteSettings } from "@/lib/curriculum";
 import { createClient } from "@/lib/supabase/server";
 
@@ -33,7 +34,7 @@ export default async function TeacherDashboard({ params }: { params: Promise<{ l
     <>
       <PageTitle>{t("title")}</PageTitle>
 
-      {!settings?.teacher_title && (
+      {!hasPlatformName(settings) && (
         <div className="mb-4">
           <Notice>
             {t("setupSettings")}{" "}

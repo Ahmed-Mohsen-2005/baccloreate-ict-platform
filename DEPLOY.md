@@ -20,7 +20,8 @@ Commands below are for PowerShell on Windows.
      3. `supabase/migrations/20261126000003_service_wrappers.sql`
      4. `supabase/migrations/20261127000004_teaching_core.sql` (attendance, announcements, materials)
      5. `supabase/migrations/20261127000005_storage_limits.sql` (file type and size limits for uploads)
-     6. `supabase/seed.sql` (the curriculum; run it once only, and only on a fresh project)
+     6. `supabase/migrations/20261127000006_platform_name.sql` (platform name setting)
+     7. `supabase/seed.sql` (the curriculum; run it once only, and only on a fresh project)
 
      Upgrading an existing project? Run only the new migration files you haven't run yet, in order. Never re-run `seed.sql`.
    - Each should end with "Success. No rows returned".
@@ -68,6 +69,10 @@ npm run dev
 3. Open <http://localhost:3000>, go to **Sign in → Teacher → Sign in with Google**. You land on the teacher dashboard.
 4. Open **Settings**, write your title (e.g. «مستر أحمد»), name and bio.
 5. Create your **groups**, then **Students → Upload student file**, then **Send codes**.
+
+## Partner teachers
+
+Any number of teachers can run the platform; each has full access to everything. To add one: sign in as a teacher → **Settings → Google emails allowed to sign in as teacher** → add their Gmail. They then sign in from **Sign in → Teacher → Sign in with Google** and land on the same dashboard. Emails listed in the `TEACHER_EMAILS` variable on Vercel are always allowed and cannot be removed from the app, so put every partner's Gmail there too (comma-separated) and redeploy; that way no partner can lock the other out by mistake. The audit log records which teacher made each change.
 
 ## 5. Put it online (Vercel)
 

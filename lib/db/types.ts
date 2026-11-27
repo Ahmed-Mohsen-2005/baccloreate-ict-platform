@@ -33,6 +33,8 @@ export type SiteSettingsRow = Stamps & {
   id: boolean;
   teacher_name: string;
   teacher_title: string;
+  platform_name_ar: string;
+  platform_name_en: string;
   bio_ar: string;
   bio_en: string;
   photo_key: string | null;
@@ -228,7 +230,7 @@ export type Database = {
       teacher_allowlist: Table<TeacherAllowlistRow, never>;
       site_settings: Table<
         SiteSettingsRow,
-        | "id" | "teacher_name" | "teacher_title" | "bio_ar" | "bio_en" | "photo_key" | "years_experience"
+        | "id" | "teacher_name" | "teacher_title" | "platform_name_ar" | "platform_name_en" | "bio_ar" | "bio_en" | "photo_key" | "years_experience"
         | "whatsapp_e164" | "socials" | "ai_features" | "consent_policy_version"
       >;
       grade_levels: Table<GradeLevelRow, "id" | "position">;

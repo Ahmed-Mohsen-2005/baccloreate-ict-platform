@@ -87,7 +87,7 @@ describe("WhatsApp messages", () => {
 
   it("lists every child's code and the parent code, gendered", () => {
     const text = codesMessage({
-      teacherTitle: "مستر تجربة",
+      platformName: "منصة تجربة",
       children: [
         { name: "سارة", gender: "f", code: "ABC234" },
         { name: "عمر", gender: "m", code: "XYZ789" },
@@ -100,6 +100,6 @@ describe("WhatsApp messages", () => {
     expect(text).toContain("كود الطالب عمر: XYZ 789");
     expect(text).toContain("كود حضرتك كولي أمر: PQR 456");
     expect(text).toContain("https://example.vercel.app/login");
-    expect(text).toContain("منصة مستر تجربة");
+    expect(text).toContain("دي أكواد الدخول على منصة تجربة.");
   });
 });

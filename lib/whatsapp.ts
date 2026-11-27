@@ -17,7 +17,7 @@ export type CodeMessageChild = {
  * Copy lives here (not in messages/*.json) because it leaves the app as a WhatsApp text.
  */
 export function codesMessage(input: {
-  teacherTitle: string;
+  platformName: string;
   children: CodeMessageChild[];
   parentCode: string;
   loginUrl: string;
@@ -25,8 +25,8 @@ export function codesMessage(input: {
   const names = input.children.map((c) => c.name).join(" و");
   const lines = [
     `أهلاً يا ولي أمر ${names}،`,
-    input.teacherTitle
-      ? `دي أكواد الدخول على منصة ${input.teacherTitle} للبرمجة والذكاء الاصطناعي.`
+    input.platformName
+      ? `دي أكواد الدخول على ${input.platformName}.`
       : "دي أكواد الدخول على منصة البرمجة والذكاء الاصطناعي.",
     "",
     ...input.children.map((c) => `كود ${c.gender === "f" ? "الطالبة" : "الطالب"} ${c.name}: ${formatCode(c.code)}`),

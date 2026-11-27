@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Notice, PageTitle } from "@/components/ui";
 import { Link } from "@/i18n/navigation";
+import { hasPlatformName } from "@/lib/brand";
 import { getSiteSettings } from "@/lib/curriculum";
 import { createClient } from "@/lib/supabase/server";
 import { CodesBoard, type Family } from "./codes-board";
@@ -43,7 +44,7 @@ export default async function CodesPage({ params, searchParams }: Props) {
   return (
     <>
       <PageTitle intro={t("intro")}>{t("title")}</PageTitle>
-      {!settings?.teacher_title && (
+      {!hasPlatformName(settings) && (
         <div className="mb-4">
           <Notice>{t("noTitle")}</Notice>
         </div>

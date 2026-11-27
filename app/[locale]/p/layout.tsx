@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { platformName } from "@/lib/brand";
 import { SiteHeader } from "@/components/site-header";
 import { requireRole } from "@/lib/auth/viewer";
 import { getSiteSettings } from "@/lib/curriculum";
@@ -10,7 +11,7 @@ export default async function ParentLayout({ children, params }: { children: Rea
   const [settings, t] = await Promise.all([getSiteSettings(), getTranslations("landing")]);
   return (
     <>
-      <SiteHeader brand={settings?.teacher_title || t("title")} signedIn theme={viewer.theme} />
+      <SiteHeader brand={platformName(settings, locale, t("title"))} signedIn theme={viewer.theme} />
       <main id="main" className="mx-auto max-w-xl px-4 py-6 pb-16 text-lg">
         {children}
       </main>

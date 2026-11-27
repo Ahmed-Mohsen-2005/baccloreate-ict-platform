@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getLocale } from "next-intl/server";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth/viewer";
+import { platformName } from "@/lib/brand";
 import { generateCode, hmacCode } from "@/lib/codes";
 import { serverEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
@@ -46,7 +47,7 @@ export async function prepareFamilyCodes(parentId: string): Promise<PrepareResul
   const [{ data: parent }, { data: links }, { data: settings }] = await Promise.all([
     supabase.from("parents").select("id, phone_e164").eq("id", id.data).is("deleted_at", null).maybeSingle(),
     supabase.from("guardianships").select("student_id").eq("parent_id", id.data),
-    supabase.from("site_settings").select("teacher_title").maybeSingle(),
+    supabase.from("site_settings").select("platform_name_ar, platform_name_en, teacher_title").maybeSingle(),
   ]);
   if (!parent) return { ok: false };
 
@@ -69,7 +70,8 @@ export async function prepareFamilyCodes(parentId: string): Promise<PrepareResul
   if (!parentCode) return { ok: false };
 
   const loginUrl = `${serverEnv().NEXT_PUBLIC_SITE_URL}${locale === "en" ? "/en" : ""}/login`;
-  const text = codesMessage({ teacherTitle: settings?.teacher_title ?? "", children, parentCode, loginUrl });
+  // The message is Arabic, so it uses the Arabic platform name (then English, then the old title).
+  const text = codesMessage({ platformName: platformName(settings, "ar", ""), children, parentCode, loginUrl });
 
   await supabase.from("messages").insert({
     template: "codes",

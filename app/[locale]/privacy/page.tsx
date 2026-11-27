@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { platformName } from "@/lib/brand";
 import { SiteHeader } from "@/components/site-header";
 import { getViewer } from "@/lib/auth/viewer";
 import { getSiteSettings } from "@/lib/curriculum";
@@ -12,7 +13,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
 
   return (
     <>
-      <SiteHeader brand={settings?.teacher_title || t("title")} signedIn={Boolean(viewer)} theme={viewer?.theme ?? "system"} />
+      <SiteHeader brand={platformName(settings, locale, t("title"))} signedIn={Boolean(viewer)} theme={viewer?.theme ?? "system"} />
       <main id="main" className="mx-auto max-w-prose px-4 py-8">
         <h1 className="text-2xl font-extrabold">{t("title")}</h1>
         <p className="text-xs text-pencil">{t("updated")}</p>

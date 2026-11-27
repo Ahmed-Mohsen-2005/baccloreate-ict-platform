@@ -17,6 +17,12 @@ export function SettingsForm({ settings }: { settings: SiteSettingsRow | null })
     <form action={action} className="flex flex-col gap-4">
       {state.saved && <Notice tone="success">{tc("saved")}</Notice>}
       {state.failed && <Notice tone="error">{tc("errorGeneric")}</Notice>}
+      <Field id="platform_name_ar" label={t("platformNameAr")} hint={t("platformNameHint")}>
+        <Input id="platform_name_ar" name="platform_name_ar" dir="rtl" maxLength={80} defaultValue={settings?.platform_name_ar ?? ""} />
+      </Field>
+      <Field id="platform_name_en" label={t("platformNameEn")}>
+        <Input id="platform_name_en" name="platform_name_en" dir="ltr" maxLength={80} defaultValue={settings?.platform_name_en ?? ""} />
+      </Field>
       <Field id="teacher_title" label={t("teacherTitle")} hint={t("teacherTitleHint")}>
         <Input id="teacher_title" name="teacher_title" defaultValue={settings?.teacher_title ?? ""} />
       </Field>

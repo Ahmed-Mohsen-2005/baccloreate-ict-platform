@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { platformName } from "@/lib/brand";
 import { SiteHeader } from "@/components/site-header";
 import { requireRole } from "@/lib/auth/viewer";
 import { getSiteSettings } from "@/lib/curriculum";
@@ -25,7 +26,7 @@ export default async function TeacherLayout({ children, params }: { children: Re
 
   return (
     <>
-      <SiteHeader brand={settings?.teacher_title || t("dashboard")} nav={nav} signedIn theme={viewer.theme} />
+      <SiteHeader brand={platformName(settings, locale, t("dashboard"))} nav={nav} signedIn theme={viewer.theme} />
       <main id="main" className="mx-auto max-w-5xl px-4 py-6 pb-16">
         {children}
       </main>

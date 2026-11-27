@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { platformName } from "@/lib/brand";
 import { SiteHeader } from "@/components/site-header";
 import { Button, Notice } from "@/components/ui";
 import { Link, redirect } from "@/i18n/navigation";
@@ -31,7 +32,7 @@ export default async function LoginPage({ params, searchParams }: Props) {
 
   return (
     <>
-      <SiteHeader brand={settings?.teacher_title || t("title")} theme={viewer?.theme ?? "system"} />
+      <SiteHeader brand={platformName(settings, locale, t("title"))} theme={viewer?.theme ?? "system"} />
       <main id="main" className="mx-auto max-w-md px-4 py-8">
         <h1 className="text-2xl font-extrabold">{t("title")}</h1>
 

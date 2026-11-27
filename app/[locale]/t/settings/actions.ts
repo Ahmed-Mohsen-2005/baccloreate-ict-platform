@@ -39,6 +39,8 @@ export async function saveSiteSettings(_prev: SettingsState, formData: FormData)
     .update({
       teacher_name: get("teacher_name").slice(0, 120),
       teacher_title: get("teacher_title").slice(0, 60),
+      platform_name_ar: get("platform_name_ar").slice(0, 80),
+      platform_name_en: get("platform_name_en").slice(0, 80),
       bio_ar: get("bio_ar").slice(0, 2000),
       bio_en: get("bio_en").slice(0, 2000),
       years_experience: years,

@@ -184,7 +184,7 @@
     "title": "Privacy policy",
     "updated": "Last updated: 26 November 2026",
     "sections": [
-      { "h": "Who uses the data", "p": "This platform belongs to one teacher, who is the only person who sees all students' data. A student sees only their own data; a parent sees only their own children's." },
+      { "h": "Who uses the data", "p": "This platform is run by partner teachers, who are the only people who can see all students' data. A student sees only their own data; a parent sees only their own children's." },
       { "h": "What we store", "p": "The student's name, grade, group, book edition, online or in-person attendance, gender (so Arabic messages address them correctly), and a mobile number and email if given. For parents: mobile number and email if given. Over time: attendance, marks and progress per lesson." },
       { "h": "What we never store", "p": "No national ID, address, full birth date or payment details. The platform has no payments at all." },
       { "h": "Codes", "p": "Sign-in codes are never stored as typed; we keep only an encrypted fingerprint. If a code is lost, the teacher issues a new one and the old one stops working." },
@@ -215,7 +215,7 @@
       "emptyTitle": "Start with your current students",
       "emptyBody": "Upload your student file (Excel or CSV) and the platform creates a sign-in code for every student and parent.",
       "importCta": "Upload student file",
-      "setupSettings": "Add your name, title and a short bio so they show on the home page.",
+      "setupSettings": "Add the platform name, the teachers' names and a short bio so they show on the home page.",
       "setupSettingsCta": "Open settings"
     },
     "curriculum": {
@@ -362,7 +362,7 @@
       "family": "Family {phone}",
       "filterUnsent": "Not sent",
       "filterAll": "All",
-      "noTitle": "Add your title in settings (like “Mr …”) so it appears in the message."
+      "noTitle": "Add the platform name in settings so it appears in the message."
     },
     "materials": {
       "title": "Materials",
@@ -454,7 +454,10 @@
     "settings": {
       "title": "Settings",
       "site": "Home page details",
-      "teacherName": "Your name",
+      "platformNameAr": "Platform name in Arabic",
+      "platformNameEn": "Platform name in English",
+      "platformNameHint": "Shown at the top of every page and in the WhatsApp codes message. Leave empty to keep the current name.",
+      "teacherName": "Teachers' names",
       "teacherTitle": "Your title as students say it",
       "teacherTitleHint": "e.g. Mr Ahmed. Used in messages and in “Ask the teacher”.",
       "bioAr": "Short bio in Arabic",

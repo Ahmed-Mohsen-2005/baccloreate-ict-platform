@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { DecryptTitle } from "@/components/decrypt-title";
 import { LessonCode } from "@/components/lesson-code";
 import { LocalizedTitle } from "@/components/localized-title";
+import { platformName } from "@/lib/brand";
 import { SiteHeader } from "@/components/site-header";
 import { UnitObject } from "@/components/unit-object";
 import { buttonClass } from "@/components/ui";
@@ -31,7 +32,7 @@ export default async function UnitPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader brand={settings?.teacher_title || t("title")} signedIn={Boolean(viewer)} theme={viewer?.theme ?? "system"} />
+      <SiteHeader brand={platformName(settings, locale, t("title"))} signedIn={Boolean(viewer)} theme={viewer?.theme ?? "system"} />
       <main id="main" className={`${domainClass(unit.domain)} mx-auto max-w-6xl px-4 pb-20 pt-6`}>
         <Link href={{ pathname: "/", query: { grade: grade.code } }} className="inline-block py-2 text-sm text-pencil underline underline-offset-4">
           {tu("back")}

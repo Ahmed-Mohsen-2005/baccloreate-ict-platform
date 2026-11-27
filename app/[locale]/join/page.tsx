@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { platformName } from "@/lib/brand";
 import { SiteHeader } from "@/components/site-header";
 import { PageTitle } from "@/components/ui";
 import { getViewer } from "@/lib/auth/viewer";
@@ -14,7 +15,7 @@ export default async function JoinPage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
-      <SiteHeader brand={settings?.teacher_title || t("title")} signedIn={Boolean(viewer)} theme={viewer?.theme ?? "system"} />
+      <SiteHeader brand={platformName(settings, locale, t("title"))} signedIn={Boolean(viewer)} theme={viewer?.theme ?? "system"} />
       <main id="main" className="mx-auto max-w-md px-4 py-8">
         <PageTitle intro={t("intro")}>{t("title")}</PageTitle>
         <JoinForm grades={grades} />

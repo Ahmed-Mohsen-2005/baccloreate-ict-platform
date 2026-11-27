@@ -1,7 +1,9 @@
+import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { signOut } from "@/app/actions/auth";
 import { setTheme } from "@/app/actions/preferences";
 import { Link } from "@/i18n/navigation";
+import { BrandMark } from "./brand-mark";
 import { LanguageSwitch } from "./language-switch";
 
 export type NavItem = { href: string; label: string };
@@ -19,6 +21,9 @@ export async function SiteHeader({
   theme: "system" | "light" | "dark";
 }) {
   const t = await getTranslations("common");
+  // The cookie is what the page actually renders with (works signed out); the profile value is a fallback.
+  const stored = (await cookies()).get("theme")?.value;
+  const active = stored === "light" || stored === "dark" || stored === "system" ? stored : theme;
   const themes = [
     { value: "system", label: t("themeSystem") },
     { value: "light", label: t("themeLight") },
@@ -27,8 +32,9 @@ export async function SiteHeader({
 
   return (
     <header className="border-b border-ruling bg-paper">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
-        <Link href="/" className="font-display text-lg font-extrabold no-underline">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+        <Link href="/" className="flex items-center gap-2 font-display text-lg font-extrabold no-underline">
+          <BrandMark />
           {brand}
         </Link>
         <div className="ms-auto flex items-center gap-3 text-xs">
@@ -39,7 +45,7 @@ export async function SiteHeader({
                 key={option.value}
                 name="theme"
                 value={option.value}
-                aria-pressed={theme === option.value}
+                aria-pressed={active === option.value}
                 className="rounded-[var(--radius-chip)] px-2 py-1 aria-pressed:bg-ink aria-pressed:text-paper"
               >
                 {option.label}

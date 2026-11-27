@@ -48,6 +48,8 @@
   "landing": {
     "title": "Programming and Artificial Intelligence",
     "subtitle": "The Baccalaureate curriculum, lesson by lesson",
+    "heroLead": "Every unit has something you can try with your own hands. Hover or tap a unit and see what happens inside it.",
+    "benchLabel": "Curriculum units",
     "contents": "Contents",
     "term": "Term {n}",
     "wholeYear": "One book for the whole year",
@@ -65,6 +67,12 @@
     "years": "{count, plural, one {# year of experience} other {# years of experience}}",
     "ctaLogin": "Sign in with your code",
     "ctaJoin": "Request to join"
+  },
+  "unitPage": {
+    "back": "All units",
+    "lessonsTitle": "Lessons",
+    "decryptHint": "Tap to decrypt the lesson name",
+    "openLogin": "Sign in with your code and continue where you left off"
   },
   "login": {
     "title": "Sign in",

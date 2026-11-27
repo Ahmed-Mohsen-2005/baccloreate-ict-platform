@@ -5,11 +5,13 @@ import { join } from "node:path";
 const root = join(import.meta.dirname, "..", "..");
 
 /** Boots an in-memory Postgres with the Supabase shim, all migrations and the curriculum seed. */
-export async function createTestDb(options: { seed?: boolean } = {}): Promise<PGlite> {
+export async function createTestDb(options: { seed?: boolean; stopBefore?: string } = {}): Promise<PGlite> {
   const db = await PGlite.create();
   await db.exec(readFileSync(join(root, "tests", "rls", "supabase-shim.sql"), "utf8"));
   const migrationsDir = join(root, "supabase", "migrations");
-  for (const file of readdirSync(migrationsDir).filter((f) => f.endsWith(".sql")).sort()) {
+  const migrations = readdirSync(migrationsDir).filter((f) => f.endsWith(".sql")).sort();
+  for (const file of migrations) {
+    if (file === options.stopBefore) break;
     await db.exec(readFileSync(join(migrationsDir, file), "utf8"));
   }
   if (options.seed !== false) {

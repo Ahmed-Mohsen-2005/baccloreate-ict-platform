@@ -1,6 +1,6 @@
 import "server-only";
 import { cache } from "react";
-import type { GradeLevelRow, LessonRow, SiteSettingsRow, UnitRow } from "@/lib/db/types";
+import type { GradeLevelRow, LessonRow, SiteSettingsRow, TopicRow, UnitRow } from "@/lib/db/types";
 import { createClient } from "@/lib/supabase/server";
 
 export type CurriculumLesson = LessonRow;
@@ -21,7 +21,6 @@ export const getCurriculum = cache(async (): Promise<CurriculumGrade[]> => {
   const gradeRows = grades.data ?? [];
   const unitRows = units.data ?? [];
   const lessonRows = lessons.data ?? [];
-
   const lessonsByUnit = new Map<string, CurriculumLesson[]>();
   for (const lesson of lessonRows) {
     lessonsByUnit.set(lesson.unit_id, [...(lessonsByUnit.get(lesson.unit_id) ?? []), lesson]);
@@ -32,6 +31,14 @@ export const getCurriculum = cache(async (): Promise<CurriculumGrade[]> => {
       .filter((u) => u.grade_level_id === grade.id)
       .map((u) => ({ ...u, lessons: lessonsByUnit.get(u.id) ?? [] })),
   }));
+});
+
+/** Topics are loaded only on the curriculum editor, keeping public page queries lean. */
+export const getTopics = cache(async (): Promise<TopicRow[]> => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("topics").select("*").order("lesson_id").order("position");
+  if (error) throw new Error(`Could not load lesson topics: ${error.message}`);
+  return data ?? [];
 });
 
 /** Title in the reader's language, falling back to English (Grade 10 is English only). */

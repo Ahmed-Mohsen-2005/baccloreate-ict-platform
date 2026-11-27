@@ -7,7 +7,7 @@ Planning documents live in `docs/`. Read `docs/M0-PLAN.md` before changing archi
 ## Non-negotiables (never trade these away)
 
 1. **No payments of any kind.** No prices, fees, subscriptions, invoices, paid/unpaid badges, payment reminders or payment tables. Remove anything a library or template brings in.
-2. **Three roles only:** `teacher` (the single admin), `student`, `parent`. No assistant, staff or secretary role.
+2. **Three roles only:** `teacher`, `student`, `parent`. The `teacher` role is held by the platform's partners (currently two) and each has full admin access. No assistant, staff or secretary role.
 3. **Minors' data protection from the first commit.** Guardian consent recorded with a timestamp and version. Data minimisation (no national ID, address or full birth date). **RLS on every table**, with tests that try cross-student and cross-parent reads. No student data leaves the system except to the AI provider through server routes. No use of student data for model training. Keep `PRIVACY.md` current.
 4. **AI drafts, the teacher approves.** No AI output changes a grade, reaches a parent, or is shown to students as official content without teacher approval. The only exception is the student tutor, which is labelled as AI and grounded only in approved material.
 5. **Secrets never reach the client or the repo.** All AI calls go through server code in `lib/ai/`. Keys only in env vars. `.env.example` lists names, never values. Never import `lib/ai/*` or the Supabase service-role client from a client component (`server-only` guard).

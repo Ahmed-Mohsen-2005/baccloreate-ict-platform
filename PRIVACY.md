@@ -4,7 +4,7 @@ What this platform stores about minors (15–17) and their parents, why, and whe
 
 ## Roles
 
-One teacher (admin), students, parents. No other staff role exists. Enforced by Postgres Row-Level Security on every table (`supabase/migrations/*`), tested in `tests/rls/`.
+Teachers (the platform's partners, each with full admin access), students, parents. No other staff role exists. Enforced by Postgres Row-Level Security on every table (`supabase/migrations/*`), tested in `tests/rls/`.
 
 ## What is stored, and why
 
